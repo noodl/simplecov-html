@@ -19,8 +19,12 @@ module SimpleCov
           FileUtils.cp_r(path, asset_output_path)
         end
 
+        puts 'About to write html report to file..'
         File.open(File.join(output_path, "index.html"), "wb") do |file|
-          file.puts template("layout").result(binding)
+          res = template("layout").result(binding)
+          puts "..Report generated. Size is #{ObjectSpace.memsize_of(res)}"
+          file.puts res
+          puts "..Report written"
         end
         puts output_message(result)
       end
