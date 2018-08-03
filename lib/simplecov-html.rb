@@ -3,6 +3,7 @@ require "cgi"
 require "fileutils"
 require "digest/sha1"
 require "time"
+require 'objspace'
 
 # Ensure we are using a compatible version of SimpleCov
 major, minor, patch = SimpleCov::VERSION.scan(/\d+/).first(3).map(&:to_i)
@@ -21,8 +22,10 @@ module SimpleCov
 
         puts 'About to write html report to file..'
         File.open(File.join(output_path, "index.html"), "wb") do |file|
-          res = template("layout").result(binding)
-          puts "..Report generated. Size is #{ObjectSpace.memsize_of(res)}"
+          template = template("layout")
+          puts "..template generated. Size is #{ObjectSpace.memsize_of(template)}"
+          res = template.result(binding)
+          puts "..result generated. Size is #{ObjectSpace.memsize_of(res)}"
           file.puts res
           puts "..Report written"
         end
